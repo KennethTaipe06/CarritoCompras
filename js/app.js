@@ -5,6 +5,31 @@ const vaciarCarritoBtn = document.querySelector("#vaciar-carrito");
 const listaCursos = document.querySelector("#lista-cursos");
 let carrin = [];
 
+function confirmacioEliminacion(id) {
+    let ventanaModal = document.createElement("DIV");
+
+    ventanaModal.innerHTML = `
+    <li>
+        <div>
+        <h4>
+        Esta seguro de que quiere eliminar el curso?
+        </h4>
+        <tr>
+        <td>
+        <td>
+        <a href='#' class='borrar-curso' data-id='${id}'>Eliminar</a>
+        <a href='#' class='borrar-curso' data-id='${id}'>Cancelar</a>
+        </td>
+        </td>
+        <td>
+        </td>
+        </tr>
+        </div>
+    </li>`;
+
+    carrito.appendChild(ventanaModal);
+}
+
 cargarEventListener();
 
 function cargarEventListener() {
@@ -12,9 +37,14 @@ function cargarEventListener() {
     listaCursos.addEventListener("click", agregarCurso);
     carrito.addEventListener("click", eliminarCurso);
 
-    vaciarCarritoBtn.addEventListener('click', () => {
+    vaciarCarritoBtn.addEventListener("click", () => {
         carrin = [];
         limpiarHtml();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        carrin = JSON.parse(localStorage.getItem('carrin')) || []
+        carritoHTML();
     })
 }
 
@@ -101,6 +131,7 @@ function carritoHTML() {
         //agrega el html del carrito en el tbody
         contenedorCarrito.appendChild(row);
     });
+    sincronizarStorage();
 }
 
 function limpiarHtml() {
@@ -108,4 +139,8 @@ function limpiarHtml() {
     while (contenedorCarrito.firstChild) {
         contenedorCarrito.removeChild(contenedorCarrito.firstChild);
     }
+}
+
+function sincronizarStorage() {
+    localStorage.setItem('carrin', JSON.stringify(carrin))
 }
